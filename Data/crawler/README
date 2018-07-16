@@ -36,4 +36,9 @@
    3. ".single" and ".multi" denote single-move situations vs multi-move situations. The second one occurs because comments are sometimes made on a sequence of moves rather than just one move.
 
    Format of .che file:
-   The .che file contains
+   The .che file contains Linearized Game State of Current Board <EOC> Linearized Game State of Previous Board <EOP> Move Specification <EOM> <EOMH> Raw Move Notation <EOM>
+   1. Each Linearized Game State is a sequence of 64 tokens. The "eps" token indicates an empty square. The rest of the tokens are self-explanatory , of the form color_pieceName (e.g black_bishop)
+   2. The Move Specification takes on slightly varied forms based on whether it was a simple move, or a move with a capture or check. Some of the forms mean the following:
+            a. black black knight d5 e7 indicates that Black moved the black knight from square d5 to square e7
+            b. Check moves are suffixed with an additional "check" at the end
+            c. Capture moves have an additional capture "pieceColor pieceType" at the end. e.g white white queen d3 h6 check capture black knight indicates that White moved the white queen from d3 to h6, putting a check and also capturi               ng the black knight.
