@@ -1,0 +1,39 @@
+0. getGameLinks.py was originally used to get the set of all current game links from gameknot.com. This is saved as saved_files/saved_links.p. Note however that since newer games keep getting added 
+   to gameknot.com, this is not exactly reproducible. Hence, we provide saved_files/saved_links.p directly for reproducibility. 
+   
+   saved_files/saved_links.p is a list of 11578 URLs, each one corresponding to the first page of a distinct game.
+
+1. Some games finish in one page. But some others are multi-page. extra_pages.p stores the count of pages which make up the game, for each of the games linked to by game links.
+   saved.
+   extra_pages.p is a list of 11578 integers.
+   If extra_pages[i]=0, that means that game 0 has 0 extra pages [1 game page in total]. If its 2, that means it has 2 extra pages [3 games pages in total]
+
+3. trainTestSplit.py splits saved_files/saved_links.p into saved_files/train_links.p, saved_files/valid_links.p and saved_files/test_links.p. The splitting is done based on a fixed seed. However,      since fixed seeds may sometimes have different effects based on python versions etc, we also provide these files beforehand in the repo - so you don't really need to run trainTestSplit.py
+
+4. Now, run: 
+   python run_all.py 0 11577 1 
+   This downloads all pages from index 0-11577, using a single thread. If you want to speed this up, increase the third parameter from 1 
+   to n to use n threads in parallel [Don't use a very large n, stick to a value <5] 
+
+   This will crawl the webpages associated with each of the game links, and save them under saved_files/ . Note that pages which are multi-page [Page 1 or beyond, not Page 0] are saved with a 
+   file name containing an additional suffix indicating their number.
+
+   Underneath the hood, this runs "python save_rendered_webpage.py $NUM" where $NUM is the game number for each page.
+
+5. Now run the following command:
+   python main.py html_parser
+   The command finds all .html files in saved_files/ and extracts object representations from them, saving them as pickled .obj files, with
+   the same prefix as the .html files, in the ./outputs/ directory.
+
+6. Now run: 
+   python preprocess.py train
+   python preprocess.py valid
+   python preprocess.py test
+
+   This will create requisite train,valid and test files under saved_files/ with the following nomenclature:
+   1. train.single.che contains one game situation per line. train.single.en contains the corresponding comments
+   2. ".che" and ".en" correspond to game situation and english-comment respectively. Given the same prefix, these files have the same number of lines
+   3. ".single" and ".multi" denote single-move situations vs multi-move situations. The second one occurs because comments are sometimes made on a sequence of moves rather than just one move.
+
+   Format of .che file:
+   The .che file contains
