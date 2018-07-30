@@ -11,6 +11,7 @@ Coming Soon
 ## Requirements
 Python 2.7 </br>
 PyTorch 0.3 (along with torchvision)
+PyQt4
 
 ## Reference
 If you use the data or code, please consider citing
