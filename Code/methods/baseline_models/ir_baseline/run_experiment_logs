@@ -1,0 +1,48 @@
+DESCRIPTION
+--> move
+BLEU = 0.74, 15.5/1.2/0.2/0.1 (BP=0.996, ratio=0.996, hyp_len=56356, ref_len=56568)
+Number of Unigrams: 3000 Unigram Entropy: 5.73169822094
+Number of Bigrams: 9713 Bigram Entropy: 8.11492868527
+Number of Trigrams: 13375 Trigram Entropy: 8.76649205652
+--> move + threat
+BLEU = 0.88, 15.7/1.5/0.3/0.1 (BP=1.000, ratio=1.012, hyp_len=57234, ref_len=56568)
+Number of Unigrams: 3896 Unigram Entropy: 5.81678555599
+Number of Bigrams: 13907 Bigram Entropy: 8.54465254201
+Number of Trigrams: 20283 Trigram Entropy: 9.39908009956
+--> move + threat + score
+BLEU = 1.28, 16.3/1.7/0.4/0.2 (BP=1.000, ratio=1.015, hyp_len=57441, ref_len=56568)
+Number of Unigrams: 4737 Unigram Entropy: 5.88646080766
+Number of Bigrams: 18156 Bigram Entropy: 8.85962810791
+Number of Trigrams: 27351 Trigram Entropy: 9.90127911784
+QUALITY
+--> move
+BLEU = 5.97, 38.5/12.0/2.9/1.0 (BP=0.978, ratio=0.978, hyp_len=678, ref_len=693)
+Number of Unigrams: 128 Unigram Entropy: 3.58444320084
+Number of Bigrams: 228 Bigram Entropy: 4.69749814335
+Number of Trigrams: 255 Trigram Entropy: 5.23783938778
+--> move + threat
+BLEU = 5.98, 36.5/10.7/2.8/1.2 (BP=1.000, ratio=1.052, hyp_len=729, ref_len=693)
+Number of Unigrams: 135 Unigram Entropy: 3.64222309156
+Number of Bigrams: 259 Bigram Entropy: 4.87826927369
+Number of Trigrams: 295 Trigram Entropy: 5.45185362968
+--> move + threat + score
+BLEU = 5.06, 38.5/11.7/2.5/0.6 (BP=1.000, ratio=1.062, hyp_len=736, ref_len=693)
+Number of Unigrams: 141 Unigram Entropy: 3.69132927301
+Number of Bigrams: 270 Bigram Entropy: 4.90784533547
+Number of Trigrams: 302 Trigram Entropy: 5.43107529113
+PLANNING - COMPARITIVE
+--> move
+BLEU = 1.28, 20.4/2.0/0.5/0.1 (BP=0.968, ratio=0.969, hyp_len=18425, ref_len=19024)
+Number of Unigrams: 1563 Unigram Entropy: 5.40601202917
+Number of Bigrams: 5490 Bigram Entropy: 7.82519854929
+Number of Trigrams: 7492 Trigram Entropy: 8.50065158259
+--> move + threat
+BLEU = 1.00, 19.9/1.7/0.4/0.1 (BP=0.973, ratio=0.974, hyp_len=18522, ref_len=19024)
+Number of Unigrams: 1830 Unigram Entropy: 5.50742875473
+Number of Bigrams: 6821 Bigram Entropy: 8.0781226557
+Number of Trigrams: 9577 Trigram Entropy: 8.84387640968
+--> move + threat + score
+BLEU = 0.88, 19.5/1.6/0.3/0.1 (BP=1.000, ratio=1.021, hyp_len=19431, ref_len=19024)
+Number of Unigrams: 2016 Unigram Entropy: 5.56352308267
+Number of Bigrams: 7980 Bigram Entropy: 8.25002095331
+Number of Trigrams: 11552 Trigram Entropy: 9.09091091957

@@ -1,0 +1,17 @@
+Template Baseline [Move Description]
+
+templateOutput.py contains the code for the template-based method, TEMP for the Move Description subset
+
+To Run:
+python templateOutput.py <inputFileName>
+
+The <inputFileName> here is a file where each line contains the move information [and optionally, any other information, though this is not used]. 
+
+The outputs are also produced as a file named <inputFileName>.template. Each line contains the template-generated comment for the corresponding line in <inputFileName>
+
+Template Baseline [Move Quality]
+
+qualityBaseline.py contains the code for the template-based method, TEMP for the Move Quality subset.
+
+To Run:
+python qualityBaseline.py [InputFeatureFile] [OutputFile]
