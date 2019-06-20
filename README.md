@@ -10,7 +10,7 @@ Code/
 
 ## Requirements
 Python 2.7 </br>
-PyTorch 0.3 (along with torchvision)
+PyTorch 0.3 (along with torchvision) </br>
 PyQt4
 
 ## Reference
