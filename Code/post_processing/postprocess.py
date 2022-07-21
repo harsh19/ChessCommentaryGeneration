@@ -51,5 +51,3 @@ if __name__=="__main__":
 	print s, "\n", postProcess(s, player="black"), "\n"
 	s = "i think it would have been better to play the bishop to move the knight ."
 	print s, "\n", postProcess(s, player="black"), "\n"
-
-	

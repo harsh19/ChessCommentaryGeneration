@@ -11,8 +11,8 @@ import datetime
 import gc
 import sys
 import pickle
-from modules import * 
-from embeddingUtils import *
+from .modules import * 
+from .embeddingUtils import *
 
 class SeqToSeqAttn():
     def __init__(self,cnfg,wids_src=None,wids_tgt=None):
@@ -85,7 +85,7 @@ class SeqToSeqAttn():
         checkpoint={'encoder_state_dict':self.encoder.state_dict(),'revcoder_state_dict':self.revcoder.state_dict(),'decoder_state_dict':self.decoder.state_dict(),'lin_dict':self.W.state_dict(),'optimizer':optimizer.state_dict()}
         
         torch.save(checkpoint,self.cnfg.model_dir+modelName+".ckpt")
-        print "Saved Model"
+        print("Saved Model")
         return
 
     def getParams(self):
@@ -102,7 +102,7 @@ class SeqToSeqAttn():
 
         if optimizer!=None:
             optimizer.load_state_dict(checkpoint['optimizer'])
-        print "Loaded Model"
+        print("Loaded Model")
         return
 
     def decodeAll(self,srcBatches,modelName,method="greedy",evalMethod="BLEU",suffix="test",lmObj=None,testIndex=None,loss_function=None,optimizer=None,getAtt=False):
@@ -111,7 +111,7 @@ class SeqToSeqAttn():
         if getAtt:
             tgtAtts=[]
         totalTime=0.0
-        print "Decoding Start Time:",datetime.datetime.now()
+        print("Decoding Start Time:",datetime.datetime.now())
         for i,srcBatch in enumerate(srcBatches):
             tgtString=None
             startTime=datetime.datetime.now()
@@ -127,10 +127,10 @@ class SeqToSeqAttn():
             elif method=="beamSib":
                 tgtString=self.beamDecode(srcBatch,beamSib=True)
             elif method=="OSOM":
-                print "Loading Model Again"
+                print("Loading Model Again")
                 self.load_from_checkpoint(modelName,optimizer=optimizer)
                 fine_batches=testIndex[i]
-                print "Fine-Tuning Model for",i
+                print("Fine-Tuning Model for",i)
                 for batchId,batch in enumerate(fine_batches):
                     src_batch,tgt_batch,src_mask,tgt_mask=batch[0],batch[1],batch[2],batch[3]
                     self.zero_grad()
@@ -140,20 +140,20 @@ class SeqToSeqAttn():
                     del loss
                     optimizer.step()
                     #print "Update for Fine-Tuning BatchId:",batchId
-                print "Finished Fine-Tuning Model"
+                print("Finished Fine-Tuning Model")
                 tgtString=self.greedyDecode(srcBatch)
 
             endTime=datetime.datetime.now()
             timeTaken=(endTime-startTime).total_seconds()
             totalTime+=timeTaken
             if i%100==0:
-                print "Decoding Example ",i," Time Taken ",timeTaken
+                print("Decoding Example ",i," Time Taken ",timeTaken)
             tgtTimes.append(timeTaken)
             tgtStrings.append(tgtString)
             if getAtt:
                 tgtAtts.append(tgtAtt)
-        print "Decoding End Time:",datetime.datetime.now()
-        print "Total Decoding Time:",totalTime
+        print("Decoding End Time:",datetime.datetime.now())
+        print("Total Decoding Time:",totalTime)
         
         #Dump Output
         if method=="greedy":
@@ -185,10 +185,10 @@ class SeqToSeqAttn():
             elif self.cnfg.problem=="CHESS":
                 BLEUOutput=os.popen("perl multi-bleu.perl -lc "+"data/"+suffix+".che-eng.single.en"+" < "+outFileName).read()
 
-            print BLEUOutput
+            print(BLEUOutput)
         #Compute BLEU
         elif evalMethod=="ROUGE":
-            print "To implement ROUGE"
+            print("To implement ROUGE")
 
         return tgtStrings
 
