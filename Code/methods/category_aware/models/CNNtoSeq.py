@@ -54,7 +54,7 @@ class CNNSeqToSeqAttn(nn.Module):
             self.W=LinearLayer(self.cnfg.hidden_size,self.cnfg.tgtVocabSize)
 
         # print trainable variables
-        print("CNN to seq:", list(self._modules.keys()))
+        print(("CNN to seq:", list(self._modules.keys())))
         print("------------------------")
         for param in self.parameters():
             print((type(param.data), param.size()))
@@ -97,7 +97,7 @@ class CNNSeqToSeqAttn(nn.Module):
         tgtStrings=[]
         tgtTimes=[]
         totalTime=0.0
-        print("Decoding Start Time:",datetime.datetime.now())
+        print(("Decoding Start Time:",datetime.datetime.now()))
         batch_indices = list(range(len(src_batches[0])))
 
         for batchId in batch_indices:
@@ -115,12 +115,12 @@ class CNNSeqToSeqAttn(nn.Module):
             timeTaken=(endTime-startTime).total_seconds()
             totalTime+=timeTaken
             if batchId%100==0:
-                print("Decoding Example ",batchId," Time Taken ",timeTaken)
+                print(("Decoding Example ",batchId," Time Taken ",timeTaken))
             tgtTimes.append(timeTaken)
             tgtStrings.append(tgtString)
 
-        print("Decoding End Time:",datetime.datetime.now())
-        print("Total Decoding Time:",totalTime)
+        print(("Decoding End Time:",datetime.datetime.now()))
+        print(("Total Decoding Time:",totalTime))
 
         #Dump Output
         outFileName=modelName+"."+suffix+".output"

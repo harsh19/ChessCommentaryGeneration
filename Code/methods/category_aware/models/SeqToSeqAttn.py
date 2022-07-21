@@ -111,7 +111,7 @@ class SeqToSeqAttn():
         if getAtt:
             tgtAtts=[]
         totalTime=0.0
-        print("Decoding Start Time:",datetime.datetime.now())
+        print(("Decoding Start Time:",datetime.datetime.now()))
         for i,srcBatch in enumerate(srcBatches):
             tgtString=None
             startTime=datetime.datetime.now()
@@ -130,7 +130,7 @@ class SeqToSeqAttn():
                 print("Loading Model Again")
                 self.load_from_checkpoint(modelName,optimizer=optimizer)
                 fine_batches=testIndex[i]
-                print("Fine-Tuning Model for",i)
+                print(("Fine-Tuning Model for",i))
                 for batchId,batch in enumerate(fine_batches):
                     src_batch,tgt_batch,src_mask,tgt_mask=batch[0],batch[1],batch[2],batch[3]
                     self.zero_grad()
@@ -147,13 +147,13 @@ class SeqToSeqAttn():
             timeTaken=(endTime-startTime).total_seconds()
             totalTime+=timeTaken
             if i%100==0:
-                print("Decoding Example ",i," Time Taken ",timeTaken)
+                print(("Decoding Example ",i," Time Taken ",timeTaken))
             tgtTimes.append(timeTaken)
             tgtStrings.append(tgtString)
             if getAtt:
                 tgtAtts.append(tgtAtt)
-        print("Decoding End Time:",datetime.datetime.now())
-        print("Total Decoding Time:",totalTime)
+        print(("Decoding End Time:",datetime.datetime.now()))
+        print(("Total Decoding Time:",totalTime))
         
         #Dump Output
         if method=="greedy":

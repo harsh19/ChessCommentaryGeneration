@@ -88,7 +88,7 @@ def main():
         distances, indices = nbrs.kneighbors(test_points)
         #print distances, indices
         output = train_texts[indices[0][0]]
-        print output.strip()
+        print(output.strip())
         #print text.strip()
         #print ""
         #if i>5:

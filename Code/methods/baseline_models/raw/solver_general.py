@@ -6,7 +6,7 @@ import torch.optim as optim
 from collections import defaultdict
 
 
-from utils import utilities as torch_utils
+from .utils import utilities as torch_utils
 import numpy as np
 import random
 import math
@@ -14,9 +14,9 @@ import datetime
 import gc
 import sys
 
-from models.SeqToSeqAttn import SeqToSeqAttn
-from models.MultiSeqToSeq import MultiSeqToSeqAttn
-from models.CNNtoSeq import CNNSeqToSeqAttn
+from .models.SeqToSeqAttn import SeqToSeqAttn
+from .models.MultiSeqToSeq import MultiSeqToSeqAttn
+from .models.CNNtoSeq import CNNSeqToSeqAttn
 
 class Solver:
 
@@ -24,12 +24,12 @@ class Solver:
         torch.manual_seed(1)
         random.seed(7867567)
         if cnfg.problem=="MT":
-            from utils import readData as readData
+            from .utils import readData as readData
             cnfg.srcLang="de"
             cnfg.tgtLang="en"
             cnfg.taskInfo="en-de.low"
         elif cnfg.problem=="CHESS":
-            from utils import readData as readData
+            from .utils import readData as readData
             cnfg.srcLang="che"
             cnfg.tgtLang="en"
             cnfg.taskInfo="che-eng.single"
@@ -75,13 +75,13 @@ class Solver:
         tgtLangObj=self.cnfg.tgtLangObj
         wids_src=srcLangObj.wids
         wids_tgt=tgtLangObj.wids
-        print "src vocab size:",len(wids_src)
-        print "tgt vocab size:",len(wids_tgt)
+        print("src vocab size:",len(wids_src))
+        print("tgt vocab size:",len(wids_tgt))
 
         # Define model. All modes.
         if cnfg.cudnnBenchmark:
             torch.backends.cudnn.benchmark=True
-        print "Declaring Model, Loss, Optimizer"
+        print("Declaring Model, Loss, Optimizer")
         #model=SeqToSeqAttn(cnfg,wids_src=wids_src,wids_tgt=wids_tgt)
         if typ=="two_tuple":
             model=MultiSeqToSeqAttn(cnfg,wids_src=wids_src,wids_tgt=wids_tgt,encoder_configurations=['birnn','birnn'],typ=typ)
@@ -91,14 +91,14 @@ class Solver:
             model=CNNSeqToSeqAttn(cnfg,wids_src=wids_src,wids_tgt=wids_tgt,encoder_configurations=['cnn','cnn','birnn'],typ=typ)
             #model=MultiSeqToSeqAttn(cnfg,wids_src=wids_src,wids_tgt=wids_tgt,encoder_configurations=['birnn','birnn','birnn'],typ=typ)
         else:
-            print "---------not supported typ "
+            print("---------not supported typ ")
             return
         loss_function=nn.NLLLoss(ignore_index=1,size_average=False)
         if torch.cuda.is_available():
-            print "CUDA AVAILABLE. Making adjustments"
+            print("CUDA AVAILABLE. Making adjustments")
             model.cuda()
             loss_function=loss_function.cuda()
-        print "DEFINING OPTIMIZER"
+        print("DEFINING OPTIMIZER")
         optimizer=None
         if cnfg.optimizer_type=="SGD":
             optimizer=optim.SGD(model.getParams(),lr=0.05)
@@ -114,17 +114,17 @@ class Solver:
             valid_tgt=tgtLangObj.read_corpus(mode="valid", typ="sequence")
             if cnfg.mode=="train":
                 train_src,train_tgt=train_src[:cnfg.max_train_sentences],train_tgt[:cnfg.max_train_sentences]
-            print "training size:",len(train_src)
-            print "valid size:",len(valid_src)
-            train=zip(train_src,train_tgt) #zip(train_src,train_tgt)
-            valid=zip(valid_src,valid_tgt) #zip(train_src,train_tgt)
+            print("training size:",len(train_src))
+            print("valid size:",len(valid_src))
+            train=list(zip(train_src,train_tgt)) #zip(train_src,train_tgt)
+            valid=list(zip(valid_src,valid_tgt)) #zip(train_src,train_tgt)
 
             train.sort(key=lambda x:len(x[0][0])) # sort by target length
             valid.sort(key=lambda x:len(x[0][0])) # sort by target length
             train_src,train_tgt=[x[0] for x in train],[x[1] for x in train]
             valid_src,valid_tgt=[x[0] for x in valid],[x[1] for x in valid]
 
-            print "-------------- TUPLE"
+            print("-------------- TUPLE")
 
             src, trgt = self.splitData(data=[train_src, train_tgt])
             train_tgt_batches,train_tgt_masks = trgt
@@ -140,37 +140,37 @@ class Solver:
             #Sanity check
             assert (len(train_tgt_batches)==len(train_src_batches[0]))
             assert (len(valid_tgt_batches)==len(valid_src_batches[0]))
-            print "Training Batches:",len(train_tgt_batches)
-            print "Validation Batches:",len(valid_tgt_batches)
+            print("Training Batches:",len(train_tgt_batches))
+            print("Validation Batches:",len(valid_tgt_batches))
 
             if cnfg.mode=="trial":
 
-                print "Running Sample Batch"
-                print "Target Batch Shape:",train_tgt_batches[30].shape
-                print "Target Mask Shape:",train_tgt_masks[30].shape
+                print("Running Sample Batch")
+                print("Target Batch Shape:",train_tgt_batches[30].shape)
+                print("Target Mask Shape:",train_tgt_masks[30].shape)
                 sample_src_batch=[c[30] for c in train_src_batches]
                 sample_tgt_batch=train_tgt_batches[30]
                 sample_tgt_mask=train_tgt_masks[30]
                 sample_src_mask=[c[30] for c in train_src_masks]
-                print datetime.datetime.now()
+                print(datetime.datetime.now())
                 model.zero_grad()
                 #loss=model.forward(sample_src_batch,sample_tgt_batch,sample_src_mask,sample_tgt_mask,loss_function)
                 loss=model(sample_src_batch,sample_tgt_batch,sample_src_mask,sample_tgt_mask,loss_function)
                 #loss=model.forward(sample_src_batch,sample_tgt_batch,sample_src_mask,sample_mask,loss_function)
-                print loss
+                print(loss)
                 loss.backward()
                 optimizer.step()
-                print datetime.datetime.now()
-                print "Done Running Sample Batch"
+                print(datetime.datetime.now())
+                print("Done Running Sample Batch")
 
             elif cnfg.mode=="train":
 
-                print "====TRAIN MODE==="
-                print "Start Time:",datetime.datetime.now()
+                print("====TRAIN MODE===")
+                print("Start Time:",datetime.datetime.now())
 
                 for epochId in range(cnfg.NUM_EPOCHS):
 
-                    batch_indices = range(len(train_tgt_batches))
+                    batch_indices = list(range(len(train_tgt_batches)))
                     random.shuffle( batch_indices )
                     for j,batchId in enumerate(batch_indices):
                         src_batch = [ele[batchId] for ele in train_src_batches]
@@ -192,7 +192,7 @@ class Solver:
                             optimizer.step()
 
                         if j%cnfg.PRINT_STEP==0:
-                            print "Batch No:",j," Time:",datetime.datetime.now()
+                            print("Batch No:",j," Time:",datetime.datetime.now())
                             # validation perplexity
                             totalValidationLoss=0.0
                             NUM_TOKENS=0.0
@@ -212,27 +212,27 @@ class Solver:
                                 if cnfg.mem_optimize:
                                     del src_batch,tgt_batch,src_mask,tgt_mask,loss
                             perplexity=math.exp(totalValidationLoss/NUM_TOKENS)
-                            print "Epoch:",epochId," Total Validation Loss:",totalValidationLoss," Perplexity:",perplexity
+                            print("Epoch:",epochId," Total Validation Loss:",totalValidationLoss," Perplexity:",perplexity)
 
                     # save model after epoch end
                     model.save_checkpoint(modelName+"_"+str(epochId),optimizer)
 
-                print "End Time:",datetime.datetime.now()
+                print("End Time:",datetime.datetime.now())
 
         elif cnfg.mode=="inference":
 
             test_src=srcLangObj.read_corpus(mode="test", typ=typ)
             test_tgt=tgtLangObj.read_corpus(mode="test", typ="sequence")
-            print "--------------THREE TUPLE"
+            print("--------------THREE TUPLE")
 
             src, trgt = self.splitData(data=[test_src, test_tgt], batch_size=1)
             test_tgt_batches, test_tgt_masks = trgt
             test_src_batches, test_src_masks = src
 
-            print len(test_tgt_batches)
-            print len(test_src_batches[0])
+            print(len(test_tgt_batches))
+            print(len(test_src_batches[0]))
             assert (len(test_tgt_batches)==len(test_src_batches[0]))
-            print "Test Points:",len(test_tgt_batches)
+            print("Test Points:",len(test_tgt_batches))
 
             model.load_from_checkpoint(modelName)
             #Evaluate on test first

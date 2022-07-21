@@ -23,7 +23,7 @@ for x,y in zip(gtLines,stLines):
     gtoFile.write(" ".join(gtWords[1:])+"\n")
 
 
-print "Accuracy:",accuracy/total
+print("Accuracy:",accuracy/total)
 
 gtoFile.close()
 oFile.close()

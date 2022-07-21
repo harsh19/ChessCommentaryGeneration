@@ -5,7 +5,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from collections import defaultdict
 
-import torch_utils
+from . import torch_utils
 
 import numpy as np
 import random
@@ -31,7 +31,7 @@ class EncoderRNN(nn.Module):
             self.encoder=nn.LSTM(self.emb_size,self.hidden_size)
         else:
             self.encoder=nn.GRU(self.emb_size,self.hidden_size)
-        print "encoder rnn: ",self._modules.keys()
+        print("encoder rnn: ",list(self._modules.keys()))
 
     def forward(self,batchSize,embedIndex,hidden):
         embeds=self.embeddings(embedIndex)
@@ -55,7 +55,7 @@ class EncoderBiRNNModel(nn.Module):
         if not share_embeddings:
             reference_embeddings=self.encoder.embeddings
         self.revcoder=EncoderRNN(wids,vocabSize,emb_size,hidden_size,use_LSTM,share_embeddings=True, reference_embeddings=reference_embeddings)
-        print "EncoderBiRNNModel: ",self._modules.keys()
+        print("EncoderBiRNNModel: ",list(self._modules.keys()))
 
 
     def forward(self,srcBatch,srcMask,hidden,srcMasking=False,inference=False):

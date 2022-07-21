@@ -67,29 +67,29 @@ def parseArguments():
 
 params=parseArguments()
 params.lmObj=None
-print params
+print(params)
 
 if params.use_general_solver:
-    import solver_general as solver
+    from . import solver_general as solver
     seq2seq=solver.Solver(params)
-    print "TYP = ", params.typ
+    print("TYP = ", params.typ)
     seq2seq.main(typ=params.typ)
 elif params.useLM:
-    import solver_lm as solver
+    from . import solver_lm as solver
     seq2seq=solver.Solver(params)
     seq2seq.main()
 else:
     lmObj=None
     if params.mode=="inference" and params.method=="beamLM":
-        print "Loading LM"
-        import solver_lm as solver_lm
+        print("Loading LM")
+        from . import solver_lm as solver_lm
         copiedParams=copy.deepcopy(params)
         copiedParams.mode="saveLM"
         copiedParams.modelName=params.lmName
         lmObj=solver_lm.Solver(copiedParams)
         lmObj.main()
         params.lmObj=lmObj
-        print "Done Loading LM"
-    import solver
+        print("Done Loading LM")
+    from . import solver
     seq2seq=solver.Solver(params)
     seq2seq.main()

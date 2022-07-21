@@ -28,7 +28,7 @@ class Lang:
             for word in words:
                 word_frequencies[word] += 1
 
-        for word, freq in word_frequencies.items():
+        for word, freq in list(word_frequencies.items()):
             if freq > self.min_frequency:
                 self.wids[word] = len(self.wids)
 
@@ -71,7 +71,7 @@ class Lang:
                 prev_board.append(tmp[0])
                 cur_board.append(tmp[1])
                 moves.append(tmp[2])
-            data = zip(prev_board, cur_board, moves)
+            data = list(zip(prev_board, cur_board, moves))
             return data
 
         elif typ == "two_tuple":
@@ -95,7 +95,7 @@ class Lang:
                 prev_board.append(tmp[0])
                 cur_board.append(tmp[1])
                 moves.append(tmp[2])
-            data = zip(prev_board, cur_board)
+            data = list(zip(prev_board, cur_board))
             return data
 
         elif typ == "entire_as_tuple":
@@ -137,7 +137,7 @@ def read_corpus(
             for word in words:
                 word_frequencies[word] += 1
 
-        for word, freq in word_frequencies.items():
+        for word, freq in list(word_frequencies.items()):
             if freq > min_frequency:
                 wids[word] = len(wids)
 

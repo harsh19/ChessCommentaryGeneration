@@ -48,7 +48,7 @@ class MultiSeqToSeqAttn(nn.Module):
             self.W=LinearLayer(self.cnfg.hidden_size,self.cnfg.tgtVocabSize)
         self.models['W']=self.W
 
-        print("MultiSeqToSeqAttn:", list(self._modules.keys()))
+        print(("MultiSeqToSeqAttn:", list(self._modules.keys())))
         print("------------------------")
         for param in self.parameters():
             print((type(param.data), param.size()))
@@ -96,7 +96,7 @@ class MultiSeqToSeqAttn(nn.Module):
         tgtStrings=[]
         tgtTimes=[]
         totalTime=0.0
-        print("Decoding Start Time:",datetime.datetime.now())
+        print(("Decoding Start Time:",datetime.datetime.now()))
         batch_indices = list(range(len(src_batches[0])))
 
         for batchId in batch_indices:
@@ -114,12 +114,12 @@ class MultiSeqToSeqAttn(nn.Module):
             timeTaken=(endTime-startTime).total_seconds()
             totalTime+=timeTaken
             if batchId%100==0:
-                print("Decoding Example ",batchId," Time Taken ",timeTaken)
+                print(("Decoding Example ",batchId," Time Taken ",timeTaken))
             tgtTimes.append(timeTaken)
             tgtStrings.append(tgtString)
 
-        print("Decoding End Time:",datetime.datetime.now())
-        print("Total Decoding Time:",totalTime)
+        print(("Decoding End Time:",datetime.datetime.now()))
+        print(("Total Decoding Time:",totalTime))
 
         #Dump Output
         outFileName=modelName+"."+suffix+".output"
@@ -156,11 +156,11 @@ class MultiSeqToSeqAttn(nn.Module):
 
     def _decoderStep(self, batch_size, cur_inputs, encoder_outputs, o_t, previous_hidden,inference=False):
         tgtEmbedIndex=self.getIndex(cur_inputs,inference=inference)
-        print("previous_hidden = ",previous_hidden[0].data.shape)
-        print("cur_inputs = ",cur_inputs.shape)
-        print("encoder_outputs = ",encoder_outputs.data.shape)
-        print("o_t = ",o_t.data.shape)
-        print("batch_size = ",batch_size)
+        print(("previous_hidden = ",previous_hidden[0].data.shape))
+        print(("cur_inputs = ",cur_inputs.shape))
+        print(("encoder_outputs = ",encoder_outputs.data.shape))
+        print(("o_t = ",o_t.data.shape))
+        print(("batch_size = ",batch_size))
         out,hidden,c_t=self.models['decoder'](batch_size,tgtEmbedIndex,encoder_outputs,o_t,previous_hidden,feedContextVector=False,inference=inference)
         return out,hidden,c_t
 
@@ -315,7 +315,7 @@ class MultiSeqToSeqAttn(nn.Module):
                 hidden_beam1 = torch.stack(hidden_beam1).squeeze(0)
                 hidden_beam1 = hidden_beam1.view(1,len(partial_captions_list),-1)
                 hidden_beam = (hidden_beam0, hidden_beam1)
-                print("row_beam.shape[0] : ",row_beam.shape[0])
+                print(("row_beam.shape[0] : ",row_beam.shape[0]))
                 out,hidden,context_vectors = self._decoderStep( row_beam.shape[0], row_beam, encoder_outs_combined_beam, o_t_beam, hidden_beam, inference=True)
                 out = out.squeeze(0)
                 if self.cnfg.use_attention:

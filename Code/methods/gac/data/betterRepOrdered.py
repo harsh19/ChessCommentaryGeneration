@@ -28,7 +28,7 @@ for split in splits:
     boardInfoObj=BoardInfo()
     for line in inSrcFile:
         words=line.split()
-        print words
+        print(words)
         #outSrcFile.write(line[index+6:])
         #print words
         EOPIndex=words.index("<EOP>")
@@ -94,12 +94,12 @@ for split in splits:
         squareToMoveTo=words[EOPIndex+5]
         restOfStuff=" ".join(words[EOPIndex+6:-1]+["<EORest>",])
         finalTag=words[-1]
-        print playerToMoveString
-        print pieceToMoveString
-        print squareToMove
-        print squareToMoveTo
-        print restOfStuff
-        print finalTag
+        print(playerToMoveString)
+        print(pieceToMoveString)
+        print(squareToMove)
+        print(squareToMoveTo)
+        print(restOfStuff)
+        print(finalTag)
 
         moveOrder=None
 
@@ -114,9 +114,9 @@ for split in splits:
         elif order==4:
             moveOrder=[squareToMove,pieceToMoveString,squareToMoveTo,restOfStuff,playerToMoveString,finalTag]
 
-        print len(moveOrder)
+        print(len(moveOrder))
         moveString=" ".join(moveOrder)
-        print "Move String:",moveString
+        print("Move String:",moveString)
 
         finalOrder=None
         if featureType=="attack":
@@ -135,8 +135,8 @@ for split in splits:
 
         newLineToPrint=" ".join(finalOrder)+"\n"
         outSrcFile.write(newLineToPrint)
-        print lineToPrint    
-        print newLineToPrint
+        print(lineToPrint)    
+        print(newLineToPrint)
 
     outTgtFile.close()
     outSrcFile.close()

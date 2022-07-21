@@ -60,5 +60,5 @@ if __name__=="__main__":
     file7=["eps","white_king"]+["eps",]*4+["white_pawn","black_king"]
     file8=["white_rook",]+["eps",]*5+["black_pawn","eps"]
     pieceList=file1+file2+file3+file4+file5+file6+file7+file8
-    print len(pieceList)
-    print convertToFEN(pieceList)
+    print(len(pieceList))
+    print(convertToFEN(pieceList))

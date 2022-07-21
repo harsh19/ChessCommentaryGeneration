@@ -11,7 +11,7 @@ import datetime
 import gc
 import sys
 
-from modules import *
+from .modules import *
 
 class CNNSeqToSeqAttn(nn.Module):
     def __init__(self,cnfg,wids_src=None,wids_tgt=None,encoder_configurations=['cnn','cnn', 'birnn'],typ="normal"): # As of now assumes shared vocab on all input sequences
@@ -54,11 +54,11 @@ class CNNSeqToSeqAttn(nn.Module):
             self.W=LinearLayer(self.cnfg.hidden_size,self.cnfg.tgtVocabSize)
 
         # print trainable variables
-        print "CNN to seq:", self._modules.keys()
-        print "------------------------"
+        print("CNN to seq:", list(self._modules.keys()))
+        print("------------------------")
         for param in self.parameters():
-            print(type(param.data), param.size())
-        print "------------------------"
+            print((type(param.data), param.size()))
+        print("------------------------")
 
 
     def getIndex(self,row,inference=False):
@@ -77,10 +77,10 @@ class CNNSeqToSeqAttn(nn.Module):
         return (autograd.Variable(hiddenElem1),autograd.Variable(hiddenElem2))
 
     def save_checkpoint(self,modelName,optimizer):
-        checkpoint={k:v.state_dict() for k,v in self._modules.items()}
+        checkpoint={k:v.state_dict() for k,v in list(self._modules.items())}
         checkpoint['optimizer']=optimizer.state_dict()
         torch.save(checkpoint,self.cnfg.model_dir+modelName+".ckpt")
-        print "Saved Model"
+        print("Saved Model")
 
     def getParams(self):
         return self.parameters()
@@ -91,14 +91,14 @@ class CNNSeqToSeqAttn(nn.Module):
             model.load_state_dict(checkpoint[k])
         if optimizer!=None:
             optimizer.load_state_dict(checkpoint['optimizer'])
-        print "Loaded Model"
+        print("Loaded Model")
 
     def decodeAll(self,src_batches,src_masks,modelName,method="greedy",evalMethod="BLEU",suffix="test"):
         tgtStrings=[]
         tgtTimes=[]
         totalTime=0.0
-        print "Decoding Start Time:",datetime.datetime.now()
-        batch_indices = range(len(src_batches[0]))
+        print("Decoding Start Time:",datetime.datetime.now())
+        batch_indices = list(range(len(src_batches[0])))
 
         for batchId in batch_indices:
 
@@ -115,12 +115,12 @@ class CNNSeqToSeqAttn(nn.Module):
             timeTaken=(endTime-startTime).total_seconds()
             totalTime+=timeTaken
             if batchId%100==0:
-                print "Decoding Example ",batchId," Time Taken ",timeTaken
+                print("Decoding Example ",batchId," Time Taken ",timeTaken)
             tgtTimes.append(timeTaken)
             tgtStrings.append(tgtString)
 
-        print "Decoding End Time:",datetime.datetime.now()
-        print "Total Decoding Time:",totalTime
+        print("Decoding End Time:",datetime.datetime.now())
+        print("Total Decoding Time:",totalTime)
 
         #Dump Output
         outFileName=modelName+"."+suffix+".output"
@@ -139,10 +139,10 @@ class CNNSeqToSeqAttn(nn.Module):
         if evalMethod=="BLEU":
             import os
             BLEUOutput=os.popen("perl multi-bleu.perl -lc "+"data/"+suffix+".che-eng.single.en"+" < "+outFileName).read()
-            print BLEUOutput
+            print(BLEUOutput)
         #Compute BLEU
         elif evalMethod=="ROUGE":
-            print "To implement ROUGE"
+            print("To implement ROUGE")
 
         return tgtStrings
 

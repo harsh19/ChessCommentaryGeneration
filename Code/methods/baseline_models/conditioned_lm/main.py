@@ -37,8 +37,8 @@ def parseArguments():
     return args
 
 params=parseArguments()
-print params
+print(params)
 
-import solver
+from . import solver
 obj = solver.Solver(params)
 obj.main()
