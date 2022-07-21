@@ -11,7 +11,7 @@ def postProcess(s, player="black"):
 	s = s.strip()
 	s = s.replace("'m","am")
 	words = s.split()
-	print "words = ", words
+	print("words = ", words)
 	if words[0]=="so" or words[0]=="and":
 		words = words[1:]
 	if words[0].lower()=="i":
@@ -36,20 +36,20 @@ def postProcess(s, player="black"):
 
 if __name__=="__main__":
 	s = "I protect my knight ."
-	print s, "\n", postProcess(s, player="black"), "\n"
+	print(s, "\n", postProcess(s, player="black"), "\n")
 	s = "I decide to exchange my bishop ."
-	print s, "\n", postProcess(s, player="black"), "\n"
+	print(s, "\n", postProcess(s, player="black"), "\n")
 	s = "I attack his queen with my knight ."
-	print s, "\n", postProcess(s, player="black"), "\n"
+	print(s, "\n", postProcess(s, player="black"), "\n")
 	s = "I attacked his queen with my knight ."
-	print s, "\n", postProcess(s, player="black"), "\n"
+	print(s, "\n", postProcess(s, player="black"), "\n")
 	s = "He attacked my queen with his knight ."
-	print s, "\n", postProcess(s, player="black"), "\n"
+	print(s, "\n", postProcess(s, player="black"), "\n")
 	s = "I 'm going to attack the bishop ."
-	print s, "\n", postProcess(s, player="black"), "\n"
+	print(s, "\n", postProcess(s, player="black"), "\n")
 	s = "... so I bring my knight out"
-	print s, "\n", postProcess(s, player="black"), "\n"
+	print(s, "\n", postProcess(s, player="black"), "\n")
 	s = "i think it would have been better to play the bishop to move the knight ."
-	print s, "\n", postProcess(s, player="black"), "\n"
+	print(s, "\n", postProcess(s, player="black"), "\n")
 
 	

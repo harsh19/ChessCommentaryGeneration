@@ -28,7 +28,7 @@ def expander_main():
 	saved_links = pickle.load( open(src,"r") )
 	counts = []
 	for i, link in enumerate(saved_links):
-		print "i,link = ",i, link
+		print("i,link = ",i, link)
 		num = 0
 		#if i<2: continue
 		#if i>3: break
@@ -37,7 +37,7 @@ def expander_main():
 			html_doc = open(data_path + file,"r").read()
 			soup = utils.getSoupFromHTML(html_doc)
 			paginator = utils.getTableOfClass(soup, 'paginator')
-			print "len(paginator) = ",len(paginator)
+			print("len(paginator) = ",len(paginator))
 			if len(paginator)>0:
 				paginator = paginator[0] # If it occurs, it occurs twice - and both seem to be identical
 				txt = utils.soupToText(paginator).lower()
@@ -48,12 +48,12 @@ def expander_main():
 							num+=1
 						else:
 							break
-			print "num = ",num
+			print("num = ",num)
 		except:
-			print "----ERROR:"
+			print("----ERROR:")
 		counts.append(num)
-	print "len(counts) = ",len(counts)
-	print "sum(counts) = ",sum(counts)
+	print("len(counts) = ",len(counts))
+	print("sum(counts) = ",sum(counts))
 	pickle.dump(counts, open("extra_pages.p","w"))
 			
 
@@ -68,7 +68,7 @@ class DataCollector:
 		self._utils = Utilities()
 		self._data_path = "./saved_files/"
 		self._destination_path = "./outputs/"
-		print "------"
+		print("------")
 
 	def _getList(self):
 		#files = open(self._data_path)
@@ -154,7 +154,7 @@ class DataCollector:
 		fw = open("error_files.txt","w")
 		for file in all_files:
 			try:
-				print "file = ",file
+				print("file = ",file)
 				html_doc = open(self._data_path + file,"r").read()
 				soup = self._utils.getSoupFromHTML(html_doc)
 				results = soup.findAll("table",{"class":"dialog"})
@@ -198,4 +198,4 @@ if mode=="html_parser":
 elif mode=="expand":
 	expander_main()
 else:
-	print "Wrong option"
+	print("Wrong option")

@@ -44,10 +44,10 @@ def pre(use_annotated_data=True, use_rules_data=False): #use_annotated_data=True
     if use_annotated_data:
         f = sys.argv[2]
         data = open(f,"r").readlines()
-        print "Headers are as follows: "
+        print("Headers are as follows: ")
         for dd in data[0].split('\t'):
-            print "--> ",dd
-        print "---------------------------"
+            print("--> ",dd)
+        print("---------------------------")
         data = data[1:]
         data = [row.strip().split('\t') for row in data]
         for i,row in enumerate(data):
@@ -81,7 +81,7 @@ def extractFeats(data):
                 counters[word]+=1
     thresh=5
     dct_updated = {}
-    valid_items = sorted(counters.items(), key=lambda x:-x[1] )
+    valid_items = sorted(list(counters.items()), key=lambda x:-x[1] )
     for item in valid_items:
         word,cnt = item
 
@@ -92,7 +92,7 @@ def extractTFidfFeats(data,min_df=2): # tfidf feats
     X_train_counts = count_vect.fit_transform(data)
     tf_transformer = TfidfTransformer().fit(X_train_counts)
     X_train_tf = tf_transformer.transform(X_train_counts)
-    print "train shape : ", X_train_tf.shape
+    print("train shape : ", X_train_tf.shape)
     #print X_train_tf
     return X_train_tf, tf_transformer,count_vect
 
@@ -100,7 +100,7 @@ def getTestFeats(data,count_vect,tf_transformer):
     data = [' '.join(row) for row in data]
     X_train_counts = count_vect.transform(data)
     X_train_tf = tf_transformer.transform(X_train_counts)
-    print "test shape : ", X_train_tf.shape
+    print("test shape : ", X_train_tf.shape)
     return X_train_tf
 
 #==========================================================================
@@ -108,11 +108,11 @@ def getTestFeats(data,count_vect,tf_transformer):
 def getAcc(pred, gt):
     #pred = np.argmax(preds_probs, axis=1)
     acc = sum(pred==gt)/(1.0*len(pred))
-    print "acc = ",acc
+    print("acc = ",acc)
     cm = [ [0,0],[0,0] ]
     for i in range(len(pred)):
         cm[gt[i]][pred[i]]+=1
-    print "cm = ",cm
+    print("cm = ",cm)
 
 def classifier(data, labels):
     spl = 100
@@ -134,7 +134,7 @@ def classifier(data, labels):
 def predictor(clf, unlabelled_data, count_vect, tf_transformer):
     X_test_tf = getTestFeats(unlabelled_data, count_vect, tf_transformer)
     X_test_tf = X_test_tf.toarray()
-    print " x test shape : ", X_test_tf.shape
+    print(" x test shape : ", X_test_tf.shape)
     probs = clf.predict_proba(X_test_tf)
     thresh= 0.50 #0.35
     #print probs[:100]
@@ -145,18 +145,18 @@ def predictor(clf, unlabelled_data, count_vect, tf_transformer):
 
 def main():
     all_data, all_labels, data_ann, label_ann = pre()
-    for j in range(num_classes): print len(all_data[j]), len(data_ann[j])
+    for j in range(num_classes): print(len(all_data[j]), len(data_ann[j]))
 
     for j in range(num_classes): all_data[j].extend(data_ann[j])
     ##for j in range(num_classes): all_data[j].extend(data_ann[j])
     for j in range(num_classes): all_labels[j].extend(label_ann[j])
     ##for j in range(num_classes): all_labels[j].extend(label_ann[j])
 
-    for j in range(num_classes): print len(all_data[j]), len(data_ann[j])
+    for j in range(num_classes): print(len(all_data[j]), len(data_ann[j]))
 
     class_num=0
     for j,(data,labels) in enumerate(zip(all_data,all_labels)):
-        print " ==================================================\n class = ",j, len(data)
+        print(" ==================================================\n class = ",j, len(data))
         #if sum(labels)<2:
         #   continue
         clf, tf_transformer, count_vect = classifier(data,labels)
@@ -165,16 +165,16 @@ def main():
                 data_unlabelled = open(f_unl,"r").readlines()
                 data_unlabelled = [row.strip().split() for row in data_unlabelled]
                 preds = predictor(clf, data_unlabelled, count_vect, tf_transformer)
-                print " ",sum(preds)," are 1 out of ",len(preds)
+                print(" ",sum(preds)," are 1 out of ",len(preds))
         	for snt,pred in zip(data_unlabelled[:5],preds[:5]):
-    	        	print snt, " --> " ,pred
+    	        	print(snt, " --> " ,pred)
                 f = f + ".pred_labels_" + str(class_num)
-                print "DUMPING predictions at ",f
+                print("DUMPING predictions at ",f)
                 fw = open(f,"w")
                 for pred in preds:
                 	fw.write(str(pred) + "\n" )
               	fw.close()
-              	print "----------------------"
+              	print("----------------------")
         #break
 	class_num+=1
 

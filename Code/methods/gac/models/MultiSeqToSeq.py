@@ -11,7 +11,7 @@ import datetime
 import gc
 import sys
 
-from modules import *
+from .modules import *
 from utils.beam_search import *
 
 class MultiSeqToSeqAttn(nn.Module):
@@ -48,11 +48,11 @@ class MultiSeqToSeqAttn(nn.Module):
             self.W=LinearLayer(self.cnfg.hidden_size,self.cnfg.tgtVocabSize)
         self.models['W']=self.W
 
-        print "MultiSeqToSeqAttn:", self._modules.keys()
-        print "------------------------"
+        print("MultiSeqToSeqAttn:", list(self._modules.keys()))
+        print("------------------------")
         for param in self.parameters():
-            print(type(param.data), param.size())
-        print "------------------------"
+            print((type(param.data), param.size()))
+        print("------------------------")
 
 
     def getIndex(self,row,inference=False):
@@ -76,28 +76,28 @@ class MultiSeqToSeqAttn(nn.Module):
             return autograd.Variable(hiddenElem1)
 
     def save_checkpoint(self,modelName,optimizer):
-        checkpoint={k:v.state_dict() for k,v in self.models.items()}
+        checkpoint={k:v.state_dict() for k,v in list(self.models.items())}
         checkpoint['optimizer']=optimizer.state_dict()
         torch.save(checkpoint,self.cnfg.model_dir+modelName+".ckpt")
-        print "Saved Model"
+        print("Saved Model")
 
     def getParams(self):
         return self.parameters()
 
     def load_from_checkpoint(self,modelName,optimizer=None): #TODO
         checkpoint=torch.load(modelName)
-        for k,model in self.models.items():
+        for k,model in list(self.models.items()):
             model.load_state_dict(checkpoint[k])
         if optimizer!=None:
             optimizer.load_state_dict(checkpoint['optimizer'])
-        print "Loaded Model"
+        print("Loaded Model")
 
     def decodeAll(self,src_batches,src_masks,modelName,method="greedy",evalMethod="BLEU",suffix="test"):
         tgtStrings=[]
         tgtTimes=[]
         totalTime=0.0
-        print "Decoding Start Time:",datetime.datetime.now()
-        batch_indices = range(len(src_batches[0]))
+        print("Decoding Start Time:",datetime.datetime.now())
+        batch_indices = list(range(len(src_batches[0])))
 
         for batchId in batch_indices:
 
@@ -114,12 +114,12 @@ class MultiSeqToSeqAttn(nn.Module):
             timeTaken=(endTime-startTime).total_seconds()
             totalTime+=timeTaken
             if batchId%100==0:
-                print "Decoding Example ",batchId," Time Taken ",timeTaken
+                print("Decoding Example ",batchId," Time Taken ",timeTaken)
             tgtTimes.append(timeTaken)
             tgtStrings.append(tgtString)
 
-        print "Decoding End Time:",datetime.datetime.now()
-        print "Total Decoding Time:",totalTime
+        print("Decoding End Time:",datetime.datetime.now())
+        print("Total Decoding Time:",totalTime)
 
         #Dump Output
         outFileName=modelName+"."+suffix+".output"
@@ -138,10 +138,10 @@ class MultiSeqToSeqAttn(nn.Module):
         if evalMethod=="BLEU":
             import os
             BLEUOutput=os.popen("perl multi-bleu.perl -lc "+"data/"+suffix+".che-eng.single.en"+" < "+outFileName).read()
-            print BLEUOutput
+            print(BLEUOutput)
         #Compute BLEU
         elif evalMethod=="ROUGE":
-            print "To implement ROUGE"
+            print("To implement ROUGE")
 
         return tgtStrings
 
@@ -156,11 +156,11 @@ class MultiSeqToSeqAttn(nn.Module):
 
     def _decoderStep(self, batch_size, cur_inputs, encoder_outputs, o_t, previous_hidden,inference=False):
         tgtEmbedIndex=self.getIndex(cur_inputs,inference=inference)
-        print "previous_hidden = ",previous_hidden[0].data.shape
-        print "cur_inputs = ",cur_inputs.shape
-        print "encoder_outputs = ",encoder_outputs.data.shape
-        print "o_t = ",o_t.data.shape
-        print "batch_size = ",batch_size
+        print("previous_hidden = ",previous_hidden[0].data.shape)
+        print("cur_inputs = ",cur_inputs.shape)
+        print("encoder_outputs = ",encoder_outputs.data.shape)
+        print("o_t = ",o_t.data.shape)
+        print("batch_size = ",batch_size)
         out,hidden,c_t=self.models['decoder'](batch_size,tgtEmbedIndex,encoder_outputs,o_t,previous_hidden,feedContextVector=False,inference=inference)
         return out,hidden,c_t
 
@@ -207,7 +207,7 @@ class MultiSeqToSeqAttn(nn.Module):
         elif self.typ=="entire_as_tuple":
             encoder_outs_combined=encoder_outs_tensors[0]
         else:
-            print "======= NOT SUPPORTED YET ======"
+            print("======= NOT SUPPORTED YET ======")
 
         tgtEmbedIndex=self.getIndex(row,inference=inference) # b,1
         #print "tgtEmbedIndex = ",tgtEmbedIndex
@@ -315,7 +315,7 @@ class MultiSeqToSeqAttn(nn.Module):
                 hidden_beam1 = torch.stack(hidden_beam1).squeeze(0)
                 hidden_beam1 = hidden_beam1.view(1,len(partial_captions_list),-1)
                 hidden_beam = (hidden_beam0, hidden_beam1)
-                print "row_beam.shape[0] : ",row_beam.shape[0]
+                print("row_beam.shape[0] : ",row_beam.shape[0])
                 out,hidden,context_vectors = self._decoderStep( row_beam.shape[0], row_beam, encoder_outs_combined_beam, o_t_beam, hidden_beam, inference=True)
                 out = out.squeeze(0)
                 if self.cnfg.use_attention:
@@ -352,4 +352,4 @@ class MultiSeqToSeqAttn(nn.Module):
             return " ".join([self.reverse_wids_tgt[x] for x in tgts])
 
         else:
-            print "---- Invalid mode----"
+            print("---- Invalid mode----")

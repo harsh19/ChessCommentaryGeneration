@@ -4,7 +4,7 @@ import pickle
 # In[1]:
 
 import sys
-from convertToFEN import convertToFEN
+from .convertToFEN import convertToFEN
 #from boardInfo import BoardInfo
 import chess
 import chess.uci
@@ -37,7 +37,7 @@ def getIndexFromRankFile(rank_file_string):
 
 def getRankFileFromIndex(index):
     file_to_val = {"a":0, "b":1, "c":2, "d":3, "e":4 , "f":5, "g":6, "h":7}
-    val_to_file = {v:k for k,v in file_to_val.items()}
+    val_to_file = {v:k for k,v in list(file_to_val.items())}
     rank = 1+index/8
     file = index%8
     rank = str(rank)
@@ -61,14 +61,14 @@ def getPieceCountFeatures(board):
             if pi in cnts:
                 cnts[pi]+=1
     vals = []
-    for k,v in cnts.items():
+    for k,v in list(cnts.items()):
         if k=='P':
             v/=8.0
         elif k!='K' and k!='Q':
             v/=2.0
         vals.append(v)
     #print "cnts_black.items() : ",cnts_black.items()
-    for k,v in cnts_black.items():
+    for k,v in list(cnts_black.items()):
         if k=='p':
             #print k
             v/=8.0
@@ -177,7 +177,7 @@ def main(src_dir, src, typ):
     all_train_feats = []
 
     all_feats = []
-    print "len(che_data) : ",len(che_data)
+    print("len(che_data) : ",len(che_data))
     i = 0
     for line in che_data:
 
@@ -197,11 +197,11 @@ def main(src_dir, src, typ):
         try:
             score_feats = getAllScoreFeatures(prev_board, square_to_move + square_to_moveTo)
         except:
-            print "error occurred. all zero vectors"
+            print("error occurred. all zero vectors")
             score_feats = [0]*19
         all_train_feats.append( score_feats )
         #prev_board = chess.Board(prev_board_fen) # board would have got changed
-        print score_feats
+        print(score_feats)
         all_feats.append(score_feats)
         #print cur_board
         i+=1

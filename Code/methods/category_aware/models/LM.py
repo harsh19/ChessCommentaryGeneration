@@ -11,8 +11,8 @@ import datetime
 import gc
 import sys
 
-from modules import * 
-from embeddingUtils import *
+from .modules import * 
+from .embeddingUtils import *
 
 class LM():
     def __init__(self,cnfg,wids_src=None,wids_tgt=None):
@@ -75,7 +75,7 @@ class LM():
     def save_checkpoint(self,modelName,optimizer):
         checkpoint={'decoder_state_dict':self.decoder.state_dict(),'lin_dict':self.W.state_dict(),'optimizer':optimizer.state_dict()} 
         torch.save(checkpoint,self.cnfg.model_dir+modelName+"lm.ckpt")
-        print "Saved Model"
+        print("Saved Model")
         return
 
     def getParams(self):
@@ -92,14 +92,14 @@ class LM():
 
         if optimizer!=None:
             optimizer.load_state_dict(checkpoint['optimizer'])
-        print "Loaded Model"
+        print("Loaded Model")
         return
 
     def decodeAll(self,srcBatches,modelName,method="greedy",evalMethod="BLEU",suffix="test"):
         tgtStrings=[]
         tgtTimes=[]
         totalTime=0.0
-        print "Decoding Start Time:",datetime.datetime.now()
+        print("Decoding Start Time:",datetime.datetime.now())
         for i,srcBatch in enumerate(srcBatches):
             tgtString=None
             startTime=datetime.datetime.now()
@@ -111,11 +111,11 @@ class LM():
             timeTaken=(endTime-startTime).total_seconds()
             totalTime+=timeTaken
             if i%100==0:
-                print "Decoding Example ",i," Time Taken ",timeTaken
+                print("Decoding Example ",i," Time Taken ",timeTaken)
             tgtTimes.append(timeTaken)
             tgtStrings.append(tgtString)
-        print "Decoding End Time:",datetime.datetime.now()
-        print "Total Decoding Time:",totalTime
+        print("Decoding End Time:",datetime.datetime.now())
+        print("Total Decoding Time:",totalTime)
         
         #Dump Output
         if method=="greedy":
@@ -142,10 +142,10 @@ class LM():
             elif self.cnfg.problem=="CHESS":
                 BLEUOutput=os.popen("perl multi-bleu.perl -lc "+"data/"+suffix+".che-eng.single.en"+" < "+outFileName).read()
 
-            print BLEUOutput
+            print(BLEUOutput)
         #Compute BLEU
         elif evalMethod=="ROUGE":
-            print "To implement ROUGE"
+            print("To implement ROUGE")
 
         return tgtStrings
 

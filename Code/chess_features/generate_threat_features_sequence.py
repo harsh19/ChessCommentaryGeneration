@@ -4,7 +4,7 @@ import pickle
 # In[1]:
 
 import sys
-from convertToFEN import convertToFEN
+from .convertToFEN import convertToFEN
 import chess
 import chess.uci
 import numpy as np
@@ -22,7 +22,7 @@ def getIndexFromRankFile(rank_file_string):
     try:
         file = file_to_val[file]
     except:
-        print "error: ",file," not found"
+        print("error: ",file," not found")
         file = 7
     rank = int(rank)-1
     index = 8*rank+file
@@ -30,7 +30,7 @@ def getIndexFromRankFile(rank_file_string):
 
 def getRankFileFromIndex(index):
     file_to_val = {"a":0, "b":1, "c":2, "d":3, "e":4 , "f":5, "g":6, "h":7}
-    val_to_file = {v:k for k,v in file_to_val.items()}
+    val_to_file = {v:k for k,v in list(file_to_val.items())}
     rank = 1+index/8
     file = index%8
     rank = str(rank)
@@ -101,10 +101,10 @@ def fnc(lst):
 
 
 def getAttackCountFeatures(board, attack_team_color=chess.BLACK):
-    print "sdd"
+    print("sdd")
     for sq in chess.SQUARES:
         piece = board.piece_at(sq)
-        print getRankFileFromIndex(sq), piece, getIndexFromRankFile( getRankFileFromIndex(sq) )
+        print(getRankFileFromIndex(sq), piece, getIndexFromRankFile( getRankFileFromIndex(sq) ))
         if board.is_attacked_by( attack_team_color, sq):
             if piece is not None:
                 pass #print getRankFileFromIndex(sq), piece
@@ -114,12 +114,12 @@ def getAttackCountFeatures(board, attack_team_color=chess.BLACK):
     
     
 ###############
-PIECE_TYPES = [PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING] = range(0, 6)
+PIECE_TYPES = [PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING] = list(range(0, 6))
 PIECE_SYMBOLS = ["p", "n", "b", "r", "q", "k"]
 PIECE_NAMES = ["pawn", "knight", "bishop", "rook", "queen", "king"]
 
 def getMoveNamesToFeatures(lst):
-    dct = { k:v for k,v in zip(PIECE_SYMBOLS,range(0,6)) }
+    dct = { k:v for k,v in zip(PIECE_SYMBOLS,list(range(0,6))) }
     ret = [0]*6
     for piece_str in lst:
         piece_str = piece_str.lower()
@@ -202,7 +202,7 @@ def main(src_dir, src, typ="threat"):
     all_train_feats = []
 
     all_feats = []
-    print "len(che_data) : ",len(che_data)
+    print("len(che_data) : ",len(che_data))
     i = 0
     for line in che_data:
 

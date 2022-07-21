@@ -26,7 +26,7 @@ for row in ['a','b','c','d','e','f','g','h']:
         initDict[""].append(row+str(col))
 
 
-for key,val in initDict.items():
+for key,val in list(initDict.items()):
     for valElem in val:
         newDict={}
         if key!="":
@@ -46,7 +46,7 @@ pieceCodes["Q"]="queen"
 pieceCodes["R"]="rook"
 
 revPieceCodes={}
-for key,val in pieceCodes.items():
+for key,val in list(pieceCodes.items()):
     revPieceCodes[val]=key
 
 def getIndex(positionString):
@@ -191,18 +191,18 @@ if __name__=="__main__":
                 data=pickle.load(open(pageObjName,"r"))
             except:
                 break
-            print len(data)
+            print(len(data))
             for elem in data:
                 moveSequence=elem[0]
                 boardState=elem[1]
                 comment=elem[2]
                 parsedMoveSequence=parseMoveHeader(moveSequence)
-                print moveSequence
-                print parsedMoveSequence
-                print boardState
+                print(moveSequence)
+                print(parsedMoveSequence)
+                print(boardState)
                 currentState=boardState
                 currentIndex=reverseIndex(boardState)
-                print currentIndex
+                print(currentIndex)
                 break
 
         break

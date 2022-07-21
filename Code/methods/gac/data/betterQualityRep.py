@@ -17,7 +17,7 @@ for line in inTgtFile:
 boardInfoObj=BoardInfo(initEngine=True)
 for line in inSrcFile:
     words=line.split()
-    print words
+    print(words)
     #outSrcFile.write(line[index+6:])
     #print words
     EOPIndex=words.index("<EOP>")
@@ -89,7 +89,7 @@ for line in inSrcFile:
     #print previousAttackerString
     lineToPrint=" ".join(words[EOPIndex+1:])+" "+previousAttackerString+" "+currentAttackerString+"\n"
     outSrcFile.write(lineToPrint)
-    print lineToPrint    
+    print(lineToPrint)    
     #exit()
 
 outTgtFile.close()

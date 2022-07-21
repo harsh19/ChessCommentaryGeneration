@@ -11,7 +11,7 @@ import pickle
 # In[1]:
 
 import sys
-from convertToFEN import convertToFEN
+from .convertToFEN import convertToFEN
 #from boardInfo import BoardInfo
 import chess
 import chess.uci
@@ -35,7 +35,7 @@ def getIndexFromRankFile(rank_file_string):
 
 def getRankFileFromIndex(index):
     file_to_val = {"a":0, "b":1, "c":2, "d":3, "e":4 , "f":5, "g":6, "h":7}
-    val_to_file = {v:k for k,v in file_to_val.items()}
+    val_to_file = {v:k for k,v in list(file_to_val.items())}
     rank = 1+index/8
     file = index%8
     rank = str(rank)
@@ -87,10 +87,10 @@ def getPiecesAtPositions(board, position_list, player):
 
 
 ###############
-PIECE_TYPES = [NOTHING, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING] = range(0, 7)
+PIECE_TYPES = [NOTHING, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING] = list(range(0, 7))
 PIECE_SYMBOLS = ["", "p", "n", "b", "r", "q", "k"]
 PIECE_NAMES = ["nothing", "pawn", "knight", "bishop", "rook", "queen", "king"]
-pice_to_one_hot_dct = { k:v for k,v in zip(PIECE_NAMES,range(0,7)) }
+pice_to_one_hot_dct = { k:v for k,v in zip(PIECE_NAMES,list(range(0,7))) }
 
 def getMoveNamesToFeatures(piece_str):
     ret = [0]*7
@@ -136,7 +136,7 @@ def getMoveFeatures(chess_str):
     try:
         idx = getIndexFromRankFile(piece_from)
     except:
-        print "error : piece_from = ", piece_from
+        print("error : piece_from = ", piece_from)
     tmp = [0]*64
     if idx!=-1:
         tmp[idx] = 1
@@ -164,7 +164,7 @@ def getMoveFeatures(chess_str):
             capture_piece = vals[idx+2]
             tmp.extend( getMoveNamesToFeatures(capture_piece) ) # 7
         except:
-            print "error for vals = ", vals
+            print("error for vals = ", vals)
             tmp = [0] * 10
     else:
         tmp = [0] * 10
@@ -195,23 +195,23 @@ def main(src_dir, src, typ="move"):
     all_train_feats = []
 
     all_feats = []
-    print "len(che_data) : ",len(che_data)
+    print("len(che_data) : ",len(che_data))
     i = 0
     for line in che_data:
         #print "i= ",i
         chess_str = line.strip() #.split()
         move_features = getMoveFeatures( chess_str )        
         all_train_feats.append( move_features )
-        print move_features
+        print(move_features)
         all_feats.append(move_features)
         i+=1
         #if i>93:
         #    break
         #print "="*99
 
-    print "all_feats: ", len(all_feats), len(all_feats[0])
-    print np.array(all_feats).shape
-    print  "./feature_dumps/" + src + "."+typ+".all_feats.pickle"
+    print("all_feats: ", len(all_feats), len(all_feats[0]))
+    print(np.array(all_feats).shape)
+    print("./feature_dumps/" + src + "."+typ+".all_feats.pickle")
     pickle.dump( all_feats, open( "./feature_dumps/" + src + "."+typ+".all_feats.pickle","w") )
 
 #main()

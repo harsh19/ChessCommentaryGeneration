@@ -12,8 +12,8 @@ import datetime
 #import sys
 import torch
 from torch.autograd import Variable
-from models import *
-from beam_search import *
+from .models import *
+from .beam_search import *
 
 
 
@@ -26,10 +26,10 @@ class CLM(nn.Module):
         self.W = nn.Linear(params.decoder_hidden_size, params.vocab_size) # use context vector also
         self.start_symbol = start_symbol
         self.end_symbol = end_symbol
-        print "SimpleModel: ",self._modules.keys()
+        print("SimpleModel: ",list(self._modules.keys()))
         for param in self.parameters():
-            print(type(param.data), param.size())
-        print "="*10
+            print((type(param.data), param.size()))
+        print("="*10)
 
     def _getLongVariable(self,row,inference=False):
         tensor=torch.LongTensor(row)
@@ -227,7 +227,7 @@ class CLM(nn.Module):
                 return outputs[0:1]
 
         else:
-            print "---- Invalid mode----"
+            print("---- Invalid mode----")
 
     def _decoderStep(self, current_input, encoder_outputs, previous_output, previous_hidden):
         batch_size = encoder_outputs.data.shape[0]

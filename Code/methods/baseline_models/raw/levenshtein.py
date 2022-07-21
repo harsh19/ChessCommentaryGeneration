@@ -17,7 +17,7 @@ def levenshtein(a,b):
         a,b = b,a
         n,m = m,n
         
-    current = range(n+1)
+    current = list(range(n+1))
     for i in range(1,m+1):
         previous, current = current, [i]+[0]*n
         for j in range(1,n+1):
@@ -31,4 +31,4 @@ def levenshtein(a,b):
 
 if __name__=="__main__":
     from sys import argv
-    print levenshtein(argv[1],argv[2])
+    print(levenshtein(argv[1],argv[2]))

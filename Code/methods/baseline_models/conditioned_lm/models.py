@@ -30,7 +30,7 @@ class AttnDecoderRNN(nn.Module):
         self.decoder=nn.LSTM(inp_size, self.hidden_size)
         self.enc_transform = nn.Linear(encoder_feat_size, hidden_size)
         self.hid_transform = nn.Linear(hidden_size, hidden_size)
-        print "AttnDecoderRNN: ",self._modules.keys()
+        print("AttnDecoderRNN: ",list(self._modules.keys()))
         #for param in self.parameters():
         #    print(type(param.data), param.size())
         #print "="*10

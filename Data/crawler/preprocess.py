@@ -83,7 +83,7 @@ outFileSingleEn=open("./saved_files/"+sys.argv[1]+".che-eng.single.en","w")
 
 outFileMultiCheStrings,outFileMultiEnStrings,outFileSingleCheStrings,outFileSingleEnStrings=[],[],[],[]
 
-print all_links[0]
+print(all_links[0])
 
 extra_links=pickle.load(open("extra_pages.p","r"))
 
@@ -121,7 +121,7 @@ for i,link in all_links:
             pageObjName="./outputs/saved"+str(i)+".obj"
         else:
             pageObjName="./outputs/saved"+str(i)+"_"+str(pageNo)+".obj"
-        print pageObjName
+        print(pageObjName)
         data=None
         try:
             #This is one page
@@ -138,13 +138,13 @@ for i,link in all_links:
             currentStateString=" ".join([x['piece'] if 'piece' in x else 'eps' for x in elem[1]])
             startStateString=" ".join([x['piece'] if 'piece' in x else 'eps' for x in startState[1]])
             diffStateString=diffString(startState[1],elem[1])
-            print "Comment:",commentWords
-            print "Start State:\n"+startStateString
-            print "Moves:",moves
+            print("Comment:",commentWords)
+            print("Start State:\n"+startStateString)
+            print("Moves:",moves)
             moveSequence=parseMoveString(moves)
-            print "Parsed Moves:",moveSequence
-            print "Current State:\n"+currentStateString
-            print "Diff State:\n"+diffStateString
+            print("Parsed Moves:",moveSequence)
+            print("Current State:\n"+currentStateString)
+            print("Diff State:\n"+diffStateString)
             srcString=currentStateString+" <EOC> "+startStateString+" <EOP> "+" ".join(moveSequence)+" <EOMH>"
             tgtString=commentWords
             if len(moveSequence)==1:

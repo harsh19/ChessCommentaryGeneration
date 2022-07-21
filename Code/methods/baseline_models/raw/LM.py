@@ -22,12 +22,17 @@ class Solver():
     
 
     def load(self):
+        pass
 
     def save(self):
+        pass
 
     def forward(self):
+        pass
 
     def train(self):
+        pass
 
 
     def score(self):
+        pass

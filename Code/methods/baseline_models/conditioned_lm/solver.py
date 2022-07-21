@@ -24,8 +24,8 @@ import sys
 
 
 method_type=["cond_lm", "lm"][0]
-import clm
-from utils import prepro
+from . import clm
+from .utils import prepro
 
 
 class Solver:
@@ -58,7 +58,7 @@ class Solver:
         elif params.optimizer_type=="ADAM":
             self.optimizer = optim.Adam(self.model.parameters())
         else:
-            print "unsupported choice of optimizer"
+            print("unsupported choice of optimizer")
 
 
     def _trainBatch(self, batch_x, batch_y):
@@ -161,14 +161,14 @@ class Solver:
         checkpoint = self.model.state_dict()
         #checkpoint['optimizer'] = self.optimizer.state_dict()
         torch.save(checkpoint, "./tmp/"+self.params.model_name+"_"+extra+".ckpt")
-        print "Saved Model"
+        print("Saved Model")
 
     def loadSavedModel(self, model_path):
         checkpoint = torch.load(model_path)
-        self.model.load_state_dict({k:v for k,v in checkpoint.items() if k!="optimizer"})
+        self.model.load_state_dict({k:v for k,v in list(checkpoint.items()) if k!="optimizer"})
         #if optimizer!=None:
         #    optimizer.load_state_dict(checkpoint['optimizer'])
-        print "Loaded Model"
+        print("Loaded Model")
 
 
     def main(self):
@@ -177,4 +177,4 @@ class Solver:
         elif self.params.mode=="decode":
             self.loadSavedModel(self.params.model_name)
             bleu = self.getBleu(split="test", output_path=self.params.model_name+".decode.")
-            print "TEST BLEU = ", bleu
+            print("TEST BLEU = ", bleu)

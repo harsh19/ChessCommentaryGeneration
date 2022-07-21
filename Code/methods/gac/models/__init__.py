@@ -23,7 +23,7 @@ class Lang():
             for word in words:
                 word_frequencies[word]+=1
         
-        for word,freq in word_frequencies.items():
+        for word,freq in list(word_frequencies.items()):
             if freq>self.min_frequency:
                 self.wids[word]=len(self.wids)
 
@@ -67,7 +67,7 @@ def read_corpus(wids,mode="train",update_dict=True,min_frequency=3,language="en"
             for word in words:
                 word_frequencies[word]+=1
         
-        for word,freq in word_frequencies.items():
+        for word,freq in list(word_frequencies.items()):
             if freq>min_frequency:
                 wids[word]=len(wids)
 

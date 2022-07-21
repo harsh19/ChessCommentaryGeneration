@@ -77,14 +77,14 @@ class Lang():
 		self.vocab_cnt = 4
 
 		# setup vocab
-		for word,freq in self.word_frequencies.items():
+		for word,freq in list(self.word_frequencies.items()):
 			if freq>=self.min_frequency:
 				self.word2idx[word]= self.vocab_cnt
 				self.vocab_cnt += 1
 			else:
 				pass
 				#print " *** ", word, freq, self.min_frequency
-		self.idx2word = {idx:w for w,idx in self.word2idx.items()}
+		self.idx2word = {idx:w for w,idx in list(self.word2idx.items())}
 
 		logging.info("Vocab size = " + str(self.vocab_cnt) )
 		#print "word2idx = ", self.word2idx
@@ -190,7 +190,7 @@ class Prepro:
 	def getBatch(self, split, batch_size, i):
 
 		if split not in ["train","val","test"]:
-			print "INVALID 'split'"
+			print("INVALID 'split'")
 			return
 		if split=="train": split_vals = self.train_split[i*batch_size:(i+1)*batch_size]
 		if split=="val": split_vals = self.val_split[i*batch_size:(i+1)*batch_size]

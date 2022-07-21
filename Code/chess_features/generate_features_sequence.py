@@ -4,14 +4,14 @@ import pickle
 # In[1]:
 
 import sys
-from convertToFEN import convertToFEN
+from .convertToFEN import convertToFEN
 import chess
 import chess.uci
 import numpy as np
 
 #import generate_score_features
-import generate_threat_features_sequence
-import generate_move_features_sequence
+from . import generate_threat_features_sequence
+from . import generate_move_features_sequence
 
 
 def main():

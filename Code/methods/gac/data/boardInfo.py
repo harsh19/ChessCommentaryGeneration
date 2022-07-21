@@ -9,17 +9,17 @@ def getChessConstant(moveString):
     fileValue={"a":0, "b":1, "c":2, "d":3, "e":4 , "f":5, "g":6, "h":7}
     fileName=moveString[0]
     rankName=moveString[1]
-    print moveString
+    print(moveString)
     fileNum=fileValue[fileName]
     rankNum=int(rankName)-1
     
     chessConstant=8*rankNum+fileNum
     #print moveString
-    print fileName
-    print rankName
-    print fileNum
-    print rankNum
-    print chessConstant
+    print(fileName)
+    print(rankName)
+    print(fileNum)
+    print(rankNum)
+    print(chessConstant)
     return chessConstant
 
 def convertToRowNotation(position):
