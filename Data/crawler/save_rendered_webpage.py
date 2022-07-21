@@ -45,16 +45,16 @@ def save_all():
 	global html_doc
 	all_links = pickle.load( open("./saved_files/saved_links.p", "r") )
 	#extra_links = pickle.load( open("extra_pages.p", "r") )
-	print "len(all_links) = ",len(all_links)
+	print("len(all_links) = ",len(all_links))
 	num = sys.argv[1]
 
 	i = params.i
-	print "i = ",type(i)
+	print("i = ",type(i))
 	num = params.num
 	url = all_links[i]
 	if num!=0:
 		url+="&pg="+str(num)
-	print "i, url = ",i,url
+	print("i, url = ",i,url)
 	#This step is important.Converting QString to Ascii for lxml to process
 	#archive_links = html.fromstring(str(result.toAscii()))
 	
@@ -71,12 +71,12 @@ def save_all():
 			fw = open("./saved_files/saved"+str(i)+"_" + str(num) + ".html", "w")
 		fw.write(html_doc)
 		fw.close()
-		print "---- SLEEPING ---- "
+		print("---- SLEEPING ---- ")
 		time.sleep(10)
 	except:
-		print "ERROR!!"
+		print("ERROR!!")
 		error_count+=1
-		print "error_count = ",error_count
+		print("error_count = ",error_count)
 	##if i>4:
 	##	break
 

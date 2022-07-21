@@ -14,7 +14,7 @@ for pageIndex in range(290):
         listOfLinks=elem.find_all('a')
         saved_links.append(rootUrl+listOfLinks[1].get('href'))
     
-    print pageIndex
+    print(pageIndex)
     #break
 
 pickle.dump(saved_links,open("saved_files/saved_links.p","wb"))

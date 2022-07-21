@@ -67,7 +67,7 @@ wids["<UNK>"]=0
 unkFrequency=0.0
 rareWords=[]
 
-for word,freq in word_frequencies.items():
+for word,freq in list(word_frequencies.items()):
     if freq>freqThreshold:
         wids[word]=len(wids)
     else:
@@ -80,7 +80,7 @@ for word in rareWords:
 word_frequencies["<UNK>"]=unkFrequency
 
 entropy=0.0
-for word,freq in word_frequencies.items():
+for word,freq in list(word_frequencies.items()):
     p_i=(freq+0.0)/(totalTokens)
     entropy+=p_i*math.log(p_i)
 
@@ -88,15 +88,15 @@ for word,freq in word_frequencies.items():
 averagePages=totalPages/total
 averageMoves=totalMoves/total
 
-print "Total Games",total
-print "More than One Long Games",moreThanOneLong
-print "Total Pages",totalPages
-print "Average Pages",averagePages
-print "Total Moves",totalMoves
-print "Long Moves",longMoves
-print "Average Moves",averageMoves
-print "Word Types",len(wids)
-print "Rare Words",len(rareWords)
-print "Word Tokens",totalTokens
-print "Average Comment Length",(totalTokens+0.0)/(totalMoves+0.0)
-print "Entropy of Freq",entropy
+print("Total Games",total)
+print("More than One Long Games",moreThanOneLong)
+print("Total Pages",totalPages)
+print("Average Pages",averagePages)
+print("Total Moves",totalMoves)
+print("Long Moves",longMoves)
+print("Average Moves",averageMoves)
+print("Word Types",len(wids))
+print("Rare Words",len(rareWords))
+print("Word Tokens",totalTokens)
+print("Average Comment Length",(totalTokens+0.0)/(totalMoves+0.0))
+print("Entropy of Freq",entropy)
